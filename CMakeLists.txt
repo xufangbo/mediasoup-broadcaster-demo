@@ -10,6 +10,17 @@ set(broadcaster_VERSION_MINOR 1)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+message("\n=========== kevin configuration ===========\n")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(WEBRTC_PATH /home/kevin/googlesource/webrtc)
+set(LIBWEBRTC_INCLUDE_PATH ${WEBRTC_PATH}/src)
+set(LIBWEBRTC_BINARY_PATH ${WEBRTC_PATH}/src/out/libstdcpp/obj)
+set(OPENSSL_INCLUDE_DIR /usr/include/openssl)
+set(CMAKE_USE_OPENSSL ON)
+add_compile_options(-Wall -Werror -w )
+
+
 message("\n=========== mediasoup-broadcaster-demo Build Configuration ===========\n")
 message(STATUS "LIBWEBRTC_INCLUDE_PATH : " ${LIBWEBRTC_INCLUDE_PATH})
 message(STATUS "LIBWEBRTC_BINARY_PATH  : " ${LIBWEBRTC_BINARY_PATH})
@@ -58,6 +69,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(mediasoupclient)
 
 message(STATUS "Fetching cpr...\n")
+set(BUILD_CPR_TESTS OFF) # 停用测试，否则报找不到：std::this_thread::sleep_for
 FetchContent_Declare(
 	cpr
 	GIT_REPOSITORY https://github.com/whoshuu/cpr
