@@ -4,7 +4,9 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/home/kevin/googlesource/webrtc"
+                "/home/kevin/googlesource/webrtc",
+                "/home/kevin/git/mediasoup-broadcaster-demo/build/_deps/mediasoupclient-src/include",
+                "/home/kevin/git/mediasoup-broadcaster-demo/build/_deps/cpr-src"
             ],
             "defines": [],
             "cStandard": "c17",

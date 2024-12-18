@@ -63,14 +63,12 @@ std::future<void> Broadcaster::OnConnectSendTransport(const json& dtlsParameters
 	std::promise<void> promise;
 
 	/* clang-format off */
-	json body =
-	{
+	json body = {
 		{ "dtlsParameters", dtlsParameters }
 	};
 	/* clang-format on */
 
-	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
-	                  this->sendTransport->GetId() + "/connect";
+	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" + this->sendTransport->GetId() + "/connect";
 	log_debug(url.c_str());
 	auto r = cpr::PostAsync(
 	           cpr::Url{ url },
@@ -85,8 +83,7 @@ std::future<void> Broadcaster::OnConnectSendTransport(const json& dtlsParameters
 	}
 	else
 	{
-		std::cerr << "[ERROR] unable to connect transport"
-		          << " [status code:" << r.status_code << ", body:\"" << r.text << "\"]" << std::endl;
+		std::cerr << "[ERROR] unable to connect transport" << " [status code:" << r.status_code << ", body:\"" << r.text << "\"]" << std::endl;
 
 		promise.set_exception(std::make_exception_ptr(r.text));
 	}
@@ -164,15 +161,13 @@ std::future<std::string> Broadcaster::OnProduce(
 	std::promise<std::string> promise;
 
 	/* clang-format off */
-	json body =
-	{
+	json body = {
 		{ "kind",          kind          },
 		{ "rtpParameters", rtpParameters }
 	};
 	/* clang-format on */
 
-	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
-	                  this->sendTransport->GetId() + "/producers";
+	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" + this->sendTransport->GetId() + "/producers";
 	log_debug(url.c_str());
 
 	auto r = cpr::PostAsync(
@@ -182,13 +177,11 @@ std::future<std::string> Broadcaster::OnProduce(
 	           cpr::VerifySsl{ verifySsl })
 	           .get();
 
-	if (r.status_code == 200)
-	{
+	if (r.status_code == 200){
 		auto response = json::parse(r.text);
 
 		auto it = response.find("id");
-		if (it == response.end() || !it->is_string())
-		{
+		if (it == response.end() || !it->is_string()){
 			promise.set_exception(std::make_exception_ptr("'id' missing in response"));
 		}
 

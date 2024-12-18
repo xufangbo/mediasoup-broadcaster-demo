@@ -31,6 +31,7 @@ int main(int /*argc*/, char* /*argv*/[])
 	// log_init_default();
 	log_options opts = { .is_color = true, .writeFile = true, .hideWorkingPath = true};
 	opts.is_time = true;
+	sprintf(opts.fileMode, "%s", "w");
 	log_init(opts);
 
 	// Retrieve configuration from environment variables.
