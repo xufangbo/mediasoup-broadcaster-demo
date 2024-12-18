@@ -68,7 +68,8 @@ std::future<void> Broadcaster::OnConnectSendTransport(const json& dtlsParameters
 	};
 	/* clang-format on */
 
-	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" + this->sendTransport->GetId() + "/connect";
+	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
+	                  this->sendTransport->GetId() + "/connect";
 	log_debug(url.c_str());
 	auto r = cpr::PostAsync(
 	           cpr::Url{ url },
@@ -83,7 +84,8 @@ std::future<void> Broadcaster::OnConnectSendTransport(const json& dtlsParameters
 	}
 	else
 	{
-		std::cerr << "[ERROR] unable to connect transport" << " [status code:" << r.status_code << ", body:\"" << r.text << "\"]" << std::endl;
+		std::cerr << "[ERROR] unable to connect transport" << " [status code:" << r.status_code
+		          << ", body:\"" << r.text << "\"]" << std::endl;
 
 		promise.set_exception(std::make_exception_ptr(r.text));
 	}
@@ -158,7 +160,7 @@ std::future<std::string> Broadcaster::OnProduce(
 	std::cout << "[INFO] Broadcaster::OnProduce()" << std::endl;
 	// std::cout << "[INFO] rtpParameters: " << rtpParameters.dump(4) << std::endl;
 
-	std::promise<std::string> promise;
+	std::promise<std::string> promise; // 这里的promise是为了兼容http异步调用，但是这里实际上同步调用所以promise只是为了接口的一致性引入的
 
 	/* clang-format off */
 	json body = {
@@ -167,7 +169,8 @@ std::future<std::string> Broadcaster::OnProduce(
 	};
 	/* clang-format on */
 
-	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" + this->sendTransport->GetId() + "/producers";
+	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
+	                  this->sendTransport->GetId() + "/producers";
 	log_debug(url.c_str());
 
 	auto r = cpr::PostAsync(
@@ -177,11 +180,13 @@ std::future<std::string> Broadcaster::OnProduce(
 	           cpr::VerifySsl{ verifySsl })
 	           .get();
 
-	if (r.status_code == 200){
+	if (r.status_code == 200)
+	{
 		auto response = json::parse(r.text);
 
 		auto it = response.find("id");
-		if (it == response.end() || !it->is_string()){
+		if (it == response.end() || !it->is_string())
+		{
 			promise.set_exception(std::make_exception_ptr("'id' missing in response"));
 		}
 
@@ -189,11 +194,14 @@ std::future<std::string> Broadcaster::OnProduce(
 	}
 	else
 	{
-		std::cerr << "[ERROR] unable to create producer"
-		          << " [status code:" << r.status_code << ", body:\"" << r.text << "\"]" << std::endl;
+		std::cerr << "[ERROR] unable to create producer [status code:" << r.status_code << ", body:\"" << r.text << "\"]" << std::endl;
 
 		promise.set_exception(std::make_exception_ptr(r.text));
 	}
+
+	// auto future = promise.get_future();
+	// log_trace("get future ok");
+	// return future;
 
 	return promise.get_future();
 }
