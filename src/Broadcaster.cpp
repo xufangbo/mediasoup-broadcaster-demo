@@ -11,6 +11,8 @@
 #include <string>
 #include <thread>
 
+#include "log.hpp"
+
 using json = nlohmann::json;
 
 Broadcaster::~Broadcaster()
@@ -67,9 +69,11 @@ std::future<void> Broadcaster::OnConnectSendTransport(const json& dtlsParameters
 	};
 	/* clang-format on */
 
+	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
+	                  this->sendTransport->GetId() + "/connect";
+	log_debug(url.c_str());
 	auto r = cpr::PostAsync(
-	           cpr::Url{ this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
-	                     this->sendTransport->GetId() + "/connect" },
+	           cpr::Url{ url },
 	           cpr::Body{ body.dump() },
 	           cpr::Header{ { "Content-Type", "application/json" } },
 	           cpr::VerifySsl{ verifySsl })
@@ -101,9 +105,12 @@ std::future<void> Broadcaster::OnConnectRecvTransport(const json& dtlsParameters
 	};
 	/* clang-format on */
 
+	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
+	                  this->recvTransport->GetId() + "/connect";
+	log_debug(url.c_str());
+
 	auto r = cpr::PostAsync(
-	           cpr::Url{ this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
-	                     this->recvTransport->GetId() + "/connect" },
+	           cpr::Url{ url },
 	           cpr::Body{ body.dump() },
 	           cpr::Header{ { "Content-Type", "application/json" } },
 	           cpr::VerifySsl{ verifySsl })
@@ -164,9 +171,12 @@ std::future<std::string> Broadcaster::OnProduce(
 	};
 	/* clang-format on */
 
+	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
+	                  this->sendTransport->GetId() + "/producers";
+	log_debug(url.c_str());
+
 	auto r = cpr::PostAsync(
-	           cpr::Url{ this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
-	                     this->sendTransport->GetId() + "/producers" },
+	           cpr::Url{ url },
 	           cpr::Body{ body.dump() },
 	           cpr::Header{ { "Content-Type", "application/json" } },
 	           cpr::VerifySsl{ verifySsl })
@@ -222,9 +232,12 @@ std::future<std::string> Broadcaster::OnProduceData(
 	};
 	/* clang-format on */
 
+	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
+	                  this->sendTransport->GetId() + "/produce/data";
+	log_debug(url.c_str());
+
 	auto r = cpr::PostAsync(
-	           cpr::Url{ this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
-	                     this->sendTransport->GetId() + "/produce/data" },
+	           cpr::Url{ url },
 	           cpr::Body{ body.dump() },
 	           cpr::Header{ { "Content-Type", "application/json" } },
 	           cpr::VerifySsl{ verifySsl })
@@ -263,7 +276,7 @@ void Broadcaster::Start(
   const json& routerRtpCapabilities,
   bool verifySsl)
 {
-	std::cout << "[INFO] Broadcaster::Start()" << std::endl;
+	log_info("Broadcaster::Start()");
 
 	this->baseUrl   = baseUrl;
 	this->verifySsl = verifySsl;
@@ -288,8 +301,11 @@ void Broadcaster::Start(
 	};
 	/* clang-format on */
 
+	std::string url = this->baseUrl + "/broadcasters";
+	log_debug(url.c_str());
+
 	auto r = cpr::PostAsync(
-	           cpr::Url{ this->baseUrl + "/broadcasters" },
+	           cpr::Url{ url },
 	           cpr::Body{ body.dump() },
 	           cpr::Header{ { "Content-Type", "application/json" } },
 	           cpr::VerifySsl{ verifySsl })
@@ -318,9 +334,11 @@ void Broadcaster::CreateDataConsumer()
 	};
 	/* clang-format on */
 	// create server data consumer
+	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
+	                  this->recvTransport->GetId() + "/consume/data";
+	log_debug(url.c_str());
 	auto r = cpr::PostAsync(
-	           cpr::Url{ this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
-	                     this->recvTransport->GetId() + "/consume/data" },
+	           cpr::Url{ url },
 	           cpr::Body{ body.dump() },
 	           cpr::Header{ { "Content-Type", "application/json" } },
 	           cpr::VerifySsl{ verifySsl })
@@ -365,9 +383,10 @@ void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 		{ "sctpCapabilities", sctpCapabilities }
 	};
 	/* clang-format on */
-
+	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports";
+	log_debug(url.c_str());
 	auto r = cpr::PostAsync(
-	           cpr::Url{ this->baseUrl + "/broadcasters/" + this->id + "/transports" },
+	           cpr::Url{ url },
 	           cpr::Body{ body.dump() },
 	           cpr::Header{ { "Content-Type", "application/json" } },
 	           cpr::VerifySsl{ verifySsl })
@@ -490,8 +509,7 @@ void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 			this->dataProducer->Send(dataBuffer);
 			run = timerKiller.WaitFor(std::chrono::seconds(intervalSeconds));
 		}
-	})
-	  .detach();
+	}).detach();
 }
 
 void Broadcaster::CreateRecvTransport()
@@ -509,8 +527,10 @@ void Broadcaster::CreateRecvTransport()
 	/* clang-format on */
 
 	// create server transport
+	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports";
+	log_debug(url.c_str());
 	auto r = cpr::PostAsync(
-	           cpr::Url{ this->baseUrl + "/broadcasters/" + this->id + "/transports" },
+	           cpr::Url{ url },
 	           cpr::Body{ body.dump() },
 	           cpr::Header{ { "Content-Type", "application/json" } },
 	           cpr::VerifySsl{ verifySsl })
@@ -600,9 +620,9 @@ void Broadcaster::Stop()
 		sendTransport->Close();
 	}
 
-	cpr::DeleteAsync(
-	  cpr::Url{ this->baseUrl + "/broadcasters/" + this->id }, cpr::VerifySsl{ verifySsl })
-	  .get();
+	std::string url = this->baseUrl + "/broadcasters/" + this->id;
+	log_debug(url.c_str());
+	cpr::DeleteAsync(cpr::Url{ url }, cpr::VerifySsl{ verifySsl }).get();
 }
 
 void Broadcaster::OnOpen(mediasoupclient::DataProducer* /*dataProducer*/)

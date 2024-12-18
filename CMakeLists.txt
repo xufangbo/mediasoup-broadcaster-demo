@@ -63,10 +63,11 @@ include(FetchContent)
 message(STATUS "\nFetching mediasoupclient...\n")
 FetchContent_Declare(
   mediasoupclient
-  GIT_REPOSITORY https://github.com/versatica/libmediasoupclient.git
+  GIT_REPOSITORY https://github.com/xufangbo/libmediasoupclient.git # https://github.com/versatica/libmediasoupclient.git
   GIT_TAG v3
 )
 FetchContent_MakeAvailable(mediasoupclient)
+
 
 message(STATUS "Fetching cpr...\n")
 set(BUILD_CPR_TESTS OFF) # 停用测试，否则报找不到：std::this_thread::sleep_for

@@ -1,0 +1,196 @@
+{
+    "codecs": [
+        {
+            "channels": 2,
+            "clockRate": 48000,
+            "kind": "audio",
+            "localParameters": {
+                "minptime": 10,
+                "useinbandfec": 1
+            },
+            "localPayloadType": 111,
+            "localRtxPayloadType": null,
+            "mimeType": "audio/opus",
+            "remoteParameters": {},
+            "remotePayloadType": 100,
+            "remoteRtxPayloadType": null,
+            "rtcpFeedback": [
+                {
+                    "parameter": "",
+                    "type": "transport-cc"
+                }
+            ]
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "localParameters": {},
+            "localPayloadType": 96,
+            "localRtxPayloadType": 97,
+            "mimeType": "video/VP8",
+            "remoteParameters": {
+                "x-google-start-bitrate": 1000
+            },
+            "remotePayloadType": 101,
+            "remoteRtxPayloadType": 102,
+            "rtcpFeedback": [
+                {
+                    "parameter": "",
+                    "type": "goog-remb"
+                },
+                {
+                    "parameter": "",
+                    "type": "transport-cc"
+                },
+                {
+                    "parameter": "fir",
+                    "type": "ccm"
+                },
+                {
+                    "parameter": "",
+                    "type": "nack"
+                },
+                {
+                    "parameter": "pli",
+                    "type": "nack"
+                }
+            ]
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "localParameters": {
+                "profile-id": 2
+            },
+            "localPayloadType": 100,
+            "localRtxPayloadType": 101,
+            "mimeType": "video/VP9",
+            "remoteParameters": {
+                "profile-id": 2,
+                "x-google-start-bitrate": 1000
+            },
+            "remotePayloadType": 103,
+            "remoteRtxPayloadType": 104,
+            "rtcpFeedback": [
+                {
+                    "parameter": "",
+                    "type": "goog-remb"
+                },
+                {
+                    "parameter": "",
+                    "type": "transport-cc"
+                },
+                {
+                    "parameter": "fir",
+                    "type": "ccm"
+                },
+                {
+                    "parameter": "",
+                    "type": "nack"
+                },
+                {
+                    "parameter": "pli",
+                    "type": "nack"
+                }
+            ]
+        }
+    ],
+    "headerExtensions": [
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "kind": "audio",
+            "recvId": 1,
+            "sendId": 4,
+            "uri": "urn:ietf:params:rtp-hdrext:sdes:mid"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "kind": "video",
+            "recvId": 1,
+            "sendId": 4,
+            "uri": "urn:ietf:params:rtp-hdrext:sdes:mid"
+        },
+        {
+            "direction": "sendonly",
+            "encrypt": false,
+            "kind": "video",
+            "recvId": 2,
+            "sendId": 10,
+            "uri": "urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id"
+        },
+        {
+            "direction": "sendonly",
+            "encrypt": false,
+            "kind": "video",
+            "recvId": 3,
+            "sendId": 11,
+            "uri": "urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-stream-id"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "kind": "audio",
+            "recvId": 4,
+            "sendId": 2,
+            "uri": "http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "kind": "video",
+            "recvId": 4,
+            "sendId": 2,
+            "uri": "http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time"
+        },
+        {
+            "direction": "sendonly",
+            "encrypt": false,
+            "kind": "audio",
+            "recvId": 5,
+            "sendId": 3,
+            "uri": "http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "kind": "video",
+            "recvId": 5,
+            "sendId": 3,
+            "uri": "http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "kind": "audio",
+            "recvId": 10,
+            "sendId": 1,
+            "uri": "urn:ietf:params:rtp-hdrext:ssrc-audio-level"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "kind": "video",
+            "recvId": 11,
+            "sendId": 13,
+            "uri": "urn:3gpp:video-orientation"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "kind": "video",
+            "recvId": 12,
+            "sendId": 14,
+            "uri": "urn:ietf:params:rtp-hdrext:toffset"
+        },
+        {
+            "direction": "sendrecv",
+            "encrypt": false,
+            "kind": "video",
+            "recvId": 14,
+            "sendId": 5,
+            "uri": "http://www.webrtc.org/experiments/rtp-hdrext/playout-delay"
+        }
+    ]
+}

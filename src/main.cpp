@@ -6,6 +6,8 @@
 #include <iostream>
 #include <string>
 
+#include "log.hpp"
+
 using json = nlohmann::json;
 
 void signalHandler(int signum)
@@ -21,6 +23,15 @@ int main(int /*argc*/, char* /*argv*/[])
 {
 	// Register signal SIGINT and signal handler.
 	signal(SIGINT, signalHandler);
+
+	// ::setenv("MY_VAR", "my_value", 1);
+	::putenv("SERVER_URL=http://101.201.247.187:4443");
+	::putenv("ROOM_ID=abcdefgh");
+	::putenv("VERIFY_SSL=false");
+	// log_init_default();
+	log_options opts = { .is_color = true, .writeFile = true, .hideWorkingPath = true};
+	opts.is_time = true;
+	log_init(opts);
 
 	// Retrieve configuration from environment variables.
 	const char* envServerUrl    = std::getenv("SERVER_URL");
@@ -82,12 +93,14 @@ int main(int /*argc*/, char* /*argv*/[])
 	std::cout << "[INFO] welcome to mediasoup broadcaster app!\n" << std::endl;
 
 	std::cout << "[INFO] verifying that room '" << envRoomId << "' exists..." << std::endl;
+
+	log_debug("%s", baseUrl.c_str());
 	auto r = cpr::GetAsync(cpr::Url{ baseUrl }, cpr::VerifySsl{ verifySsl }).get();
 
 	if (r.status_code != 200)
 	{
-		std::cerr << "[ERROR] unable to retrieve room info"
-		          << " [status code:" << r.status_code << ", body:\"" << r.text << "\"]" << std::endl;
+		std::cerr << "[ERROR] unable to retrieve room info" << " [status code:" << r.status_code
+		          << ", body:\"" << r.text << "\"]" << std::endl;
 
 		return 1;
 	}

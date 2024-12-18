@@ -1,0 +1,346 @@
+{
+    "codecs": [
+        {
+            "channels": 1,
+            "clockRate": 8000,
+            "kind": "audio",
+            "mimeType": "audio/PCMU",
+            "parameters": {},
+            "preferredPayloadType": 0,
+            "rtcpFeedback": []
+        },
+        {
+            "channels": 1,
+            "clockRate": 8000,
+            "kind": "audio",
+            "mimeType": "audio/PCMA",
+            "parameters": {},
+            "preferredPayloadType": 8,
+            "rtcpFeedback": []
+        },
+        {
+            "channels": 1,
+            "clockRate": 8000,
+            "kind": "audio",
+            "mimeType": "audio/G722",
+            "parameters": {},
+            "preferredPayloadType": 9,
+            "rtcpFeedback": []
+        },
+        {
+            "channels": 1,
+            "clockRate": 8000,
+            "kind": "audio",
+            "mimeType": "audio/CN",
+            "parameters": {},
+            "preferredPayloadType": 13,
+            "rtcpFeedback": []
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "mimeType": "video/AV1",
+            "parameters": {},
+            "preferredPayloadType": 39,
+            "rtcpFeedback": [
+                {
+                    "type": "goog-remb"
+                },
+                {
+                    "type": "transport-cc"
+                },
+                {
+                    "parameter": "fir",
+                    "type": "ccm"
+                },
+                {
+                    "type": "nack"
+                },
+                {
+                    "parameter": "pli",
+                    "type": "nack"
+                }
+            ]
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "mimeType": "video/rtx",
+            "parameters": {
+                "apt": 39
+            },
+            "preferredPayloadType": 40,
+            "rtcpFeedback": []
+        },
+        {
+            "channels": 2,
+            "clockRate": 48000,
+            "kind": "audio",
+            "mimeType": "audio/red",
+            "parameters": {
+                "111/111": ""
+            },
+            "preferredPayloadType": 63,
+            "rtcpFeedback": []
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "mimeType": "video/VP8",
+            "parameters": {},
+            "preferredPayloadType": 96,
+            "rtcpFeedback": [
+                {
+                    "type": "goog-remb"
+                },
+                {
+                    "type": "transport-cc"
+                },
+                {
+                    "parameter": "fir",
+                    "type": "ccm"
+                },
+                {
+                    "type": "nack"
+                },
+                {
+                    "parameter": "pli",
+                    "type": "nack"
+                }
+            ]
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "mimeType": "video/rtx",
+            "parameters": {
+                "apt": 96
+            },
+            "preferredPayloadType": 97,
+            "rtcpFeedback": []
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "mimeType": "video/VP9",
+            "parameters": {
+                "profile-id": 0
+            },
+            "preferredPayloadType": 98,
+            "rtcpFeedback": [
+                {
+                    "type": "goog-remb"
+                },
+                {
+                    "type": "transport-cc"
+                },
+                {
+                    "parameter": "fir",
+                    "type": "ccm"
+                },
+                {
+                    "type": "nack"
+                },
+                {
+                    "parameter": "pli",
+                    "type": "nack"
+                }
+            ]
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "mimeType": "video/rtx",
+            "parameters": {
+                "apt": 98
+            },
+            "preferredPayloadType": 99,
+            "rtcpFeedback": []
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "mimeType": "video/VP9",
+            "parameters": {
+                "profile-id": 2
+            },
+            "preferredPayloadType": 100,
+            "rtcpFeedback": [
+                {
+                    "type": "goog-remb"
+                },
+                {
+                    "type": "transport-cc"
+                },
+                {
+                    "parameter": "fir",
+                    "type": "ccm"
+                },
+                {
+                    "type": "nack"
+                },
+                {
+                    "parameter": "pli",
+                    "type": "nack"
+                }
+            ]
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "mimeType": "video/rtx",
+            "parameters": {
+                "apt": 100
+            },
+            "preferredPayloadType": 101,
+            "rtcpFeedback": []
+        },
+        {
+            "channels": 1,
+            "clockRate": 8000,
+            "kind": "audio",
+            "mimeType": "audio/ILBC",
+            "parameters": {},
+            "preferredPayloadType": 102,
+            "rtcpFeedback": []
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "mimeType": "video/rtx",
+            "parameters": {
+                "apt": 122
+            },
+            "preferredPayloadType": 103,
+            "rtcpFeedback": []
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "mimeType": "video/ulpfec",
+            "parameters": {},
+            "preferredPayloadType": 104,
+            "rtcpFeedback": []
+        },
+        {
+            "channels": 1,
+            "clockRate": 48000,
+            "kind": "audio",
+            "mimeType": "audio/telephone-event",
+            "parameters": {},
+            "preferredPayloadType": 110,
+            "rtcpFeedback": []
+        },
+        {
+            "channels": 2,
+            "clockRate": 48000,
+            "kind": "audio",
+            "mimeType": "audio/opus",
+            "parameters": {
+                "minptime": 10,
+                "useinbandfec": 1
+            },
+            "preferredPayloadType": 111,
+            "rtcpFeedback": [
+                {
+                    "type": "transport-cc"
+                }
+            ]
+        },
+        {
+            "clockRate": 90000,
+            "kind": "video",
+            "mimeType": "video/red",
+            "parameters": {},
+            "preferredPayloadType": 122,
+            "rtcpFeedback": []
+        },
+        {
+            "channels": 1,
+            "clockRate": 8000,
+            "kind": "audio",
+            "mimeType": "audio/telephone-event",
+            "parameters": {},
+            "preferredPayloadType": 126,
+            "rtcpFeedback": []
+        }
+    ],
+    "fecMechanisms": [],
+    "headerExtensions": [
+        {
+            "kind": "audio",
+            "preferredId": 1,
+            "uri": "urn:ietf:params:rtp-hdrext:ssrc-audio-level"
+        },
+        {
+            "kind": "audio",
+            "preferredId": 2,
+            "uri": "http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time"
+        },
+        {
+            "kind": "audio",
+            "preferredId": 3,
+            "uri": "http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01"
+        },
+        {
+            "kind": "audio",
+            "preferredId": 4,
+            "uri": "urn:ietf:params:rtp-hdrext:sdes:mid"
+        },
+        {
+            "kind": "video",
+            "preferredId": 14,
+            "uri": "urn:ietf:params:rtp-hdrext:toffset"
+        },
+        {
+            "kind": "video",
+            "preferredId": 2,
+            "uri": "http://www.webrtc.org/experiments/rtp-hdrext/abs-send-time"
+        },
+        {
+            "kind": "video",
+            "preferredId": 13,
+            "uri": "urn:3gpp:video-orientation"
+        },
+        {
+            "kind": "video",
+            "preferredId": 3,
+            "uri": "http://www.ietf.org/id/draft-holmer-rmcat-transport-wide-cc-extensions-01"
+        },
+        {
+            "kind": "video",
+            "preferredId": 5,
+            "uri": "http://www.webrtc.org/experiments/rtp-hdrext/playout-delay"
+        },
+        {
+            "kind": "video",
+            "preferredId": 6,
+            "uri": "http://www.webrtc.org/experiments/rtp-hdrext/video-content-type"
+        },
+        {
+            "kind": "video",
+            "preferredId": 7,
+            "uri": "http://www.webrtc.org/experiments/rtp-hdrext/video-timing"
+        },
+        {
+            "kind": "video",
+            "preferredId": 8,
+            "uri": "http://www.webrtc.org/experiments/rtp-hdrext/color-space"
+        },
+        {
+            "kind": "video",
+            "preferredId": 4,
+            "uri": "urn:ietf:params:rtp-hdrext:sdes:mid"
+        },
+        {
+            "kind": "video",
+            "preferredId": 10,
+            "uri": "urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id"
+        },
+        {
+            "kind": "video",
+            "preferredId": 11,
+            "uri": "urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-stream-id"
+        }
+    ]
+}
