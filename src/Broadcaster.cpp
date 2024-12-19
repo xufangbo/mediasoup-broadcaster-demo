@@ -81,6 +81,7 @@ std::future<void> Broadcaster::OnConnectSendTransport(const json& dtlsParameters
 	if (r.status_code == 200)
 	{
 		promise.set_value();
+		log_debug("%s", r.text.c_str());
 	}
 	else
 	{
@@ -118,6 +119,7 @@ std::future<void> Broadcaster::OnConnectRecvTransport(const json& dtlsParameters
 	if (r.status_code == 200)
 	{
 		promise.set_value();
+		log_debug("%s", r.text.c_str());
 	}
 	else
 	{
@@ -160,7 +162,8 @@ std::future<std::string> Broadcaster::OnProduce(
 	std::cout << "[INFO] Broadcaster::OnProduce()" << std::endl;
 	// std::cout << "[INFO] rtpParameters: " << rtpParameters.dump(4) << std::endl;
 
-	std::promise<std::string> promise; // 这里的promise是为了兼容http异步调用，但是这里实际上同步调用所以promise只是为了接口的一致性引入的
+	std::promise<std::string>
+	  promise; // 这里的promise是为了兼容http异步调用，但是这里实际上同步调用所以promise只是为了接口的一致性引入的
 
 	/* clang-format off */
 	json body = {
@@ -182,6 +185,7 @@ std::future<std::string> Broadcaster::OnProduce(
 
 	if (r.status_code == 200)
 	{
+		log_debug("%s", r.text.c_str());
 		auto response = json::parse(r.text);
 
 		auto it = response.find("id");
@@ -194,7 +198,8 @@ std::future<std::string> Broadcaster::OnProduce(
 	}
 	else
 	{
-		std::cerr << "[ERROR] unable to create producer [status code:" << r.status_code << ", body:\"" << r.text << "\"]" << std::endl;
+		std::cerr << "[ERROR] unable to create producer [status code:" << r.status_code << ", body:\""
+		          << r.text << "\"]" << std::endl;
 
 		promise.set_exception(std::make_exception_ptr(r.text));
 	}
@@ -246,6 +251,7 @@ std::future<std::string> Broadcaster::OnProduceData(
 
 	if (r.status_code == 200)
 	{
+		log_debug("%s", r.text.c_str());
 		auto response = json::parse(r.text);
 
 		auto it = response.find("id");
@@ -319,6 +325,7 @@ void Broadcaster::Start(
 
 		return;
 	}
+	log_debug("%s", r.text.c_str());
 
 	this->CreateSendTransport(enableAudio, useSimulcast);
 	this->CreateRecvTransport();
@@ -351,6 +358,7 @@ void Broadcaster::CreateDataConsumer()
 		return;
 	}
 
+	log_debug("%s", r.text.c_str());
 	auto response = json::parse(r.text);
 	if (response.find("id") == response.end())
 	{
@@ -400,6 +408,9 @@ void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 
 		return;
 	}
+	log_debug("<"); // 太长
+	std::cout << r.text << std::endl;
+	log_debug(">"); // 太长
 
 	auto response = json::parse(r.text);
 
@@ -545,6 +556,7 @@ void Broadcaster::CreateRecvTransport()
 		return;
 	}
 
+	log_debug("%s", r.text.c_str());
 	auto response = json::parse(r.text);
 
 	if (response.find("id") == response.end())

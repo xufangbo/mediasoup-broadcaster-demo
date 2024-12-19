@@ -9,6 +9,8 @@
 #include <mutex>
 #include <string>
 
+// #define RTC_DCHECK_IS_ON 0
+
 class Broadcaster : public
                     mediasoupclient::SendTransport::Listener,
                     mediasoupclient::RecvTransport::Listener,

@@ -7,6 +7,7 @@
 #include <string>
 
 #include "log.hpp"
+#include "MyTest.hpp"
 
 using json = nlohmann::json;
 
@@ -21,6 +22,9 @@ void signalHandler(int signum)
 
 int main(int /*argc*/, char* /*argv*/[])
 {
+	// MyTest().test();
+	// return 0;
+
 	// Register signal SIGINT and signal handler.
 	signal(SIGINT, signalHandler);
 
@@ -107,6 +111,9 @@ int main(int /*argc*/, char* /*argv*/[])
 	}
 	else
 	{
+		// log_debug("-----------");
+		// std::cout << r.text << std::endl;
+		// log_debug("-----------");
 		std::cout << "[INFO] found room" << envRoomId << std::endl;
 	}
 

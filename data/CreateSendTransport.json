@@ -1,0 +1,63 @@
+{
+    "id": "e3c3dbc7-7de6-46b9-9800-f8a3f8e94d87",
+    "iceParameters": {
+        "usernameFragment": "rghu1dhw6t0ev5zdw9yrmyupja5jcasq",
+        "password": "tebkzrv64ry0pfdrmrwtkocrtcfxu060",
+        "iceLite": true
+    },
+    "iceCandidates": [
+        {
+            "foundation": "udpcandidate",
+            "priority": 1076302079,
+            "ip": "0.0.0.0",
+            "address": "0.0.0.0",
+            "protocol": "udp",
+            "port": 44445,
+            "type": "host"
+        },
+        {
+            "foundation": "tcpcandidate",
+            "priority": 1076276479,
+            "ip": "0.0.0.0",
+            "address": "0.0.0.0",
+            "protocol": "tcp",
+            "port": 44445,
+            "type": "host",
+            "tcpType": "passive"
+        }
+    ],
+    "dtlsParameters": {
+        "fingerprints": [
+            {
+                "algorithm": "sha-384",
+                "value": "50:4F:AC:11:3C:59:C1:2F:41:50:3C:03:FF:A0:C8:5F:5F:7C:2B:A5:C3:81:92:0D:08:61:F1:7E:93:A4:A4:45:0C:58:80:47:1F:D7:83:92:92:9E:51:07:9B:32:51:2D"
+            },
+            {
+                "algorithm": "sha-512",
+                "value": "6F:B2:74:D9:25:73:34:F3:B6:BA:2A:D0:32:AC:56:A0:37:E6:F4:FD:CB:CB:DC:DC:46:83:F5:FE:50:A9:A5:46:72:01:88:53:20:0A:FC:D2:75:56:0A:C6:6E:30:55:61:58:1A:FB:60:CD:EC:B1:A2:82:D0:EB:81:9F:AA:D8:83"
+            },
+            {
+                "algorithm": "sha-224",
+                "value": "00:61:C9:29:8D:AE:78:DE:7F:DA:BB:BE:2A:C7:3F:D3:E1:34:C2:D9:EE:29:57:EA:8C:86:90:00"
+            },
+            {
+                "algorithm": "sha-1",
+                "value": "C9:E3:3F:CB:70:C2:94:8B:43:35:99:30:7B:7B:18:76:29:0D:3A:33"
+            },
+            {
+                "algorithm": "sha-256",
+                "value": "F1:5D:96:7B:2D:C0:D9:94:18:E5:C9:1D:97:32:3A:E6:CA:CC:BA:24:7C:BD:F9:7F:24:A8:29:40:2C:BF:E6:9B"
+            }
+        ],
+        "role": "auto"
+    },
+    "sctpParameters": {
+        "port": 5000,
+        "OS": 1024,
+        "MIS": 1024,
+        "maxMessageSize": 262144,
+        "sendBufferSize": 262144,
+        "sctpBufferedAmount": 0,
+        "isDataChannel": true
+    }
+}

@@ -81,6 +81,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/Broadcaster.cpp
 	src/main.cpp
 	src/MediaStreamTrackFactory.cpp
+	src/MyTest.cpp
 )
 
 # Private (implementation) header files.
