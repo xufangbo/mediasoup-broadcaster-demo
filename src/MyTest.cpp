@@ -7,5 +7,5 @@
 
 void MyTest::test()
 {
-	webrtc::PeerConnectionFactory::WebRtcTest();
+	// webrtc::PeerConnectionFactory::WebRtcTest();
 }

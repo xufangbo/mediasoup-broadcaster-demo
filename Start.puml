@@ -1,0 +1,18 @@
+@startuml xx
+
+' https://pdf.plantuml.net/1.2020.22/PlantUML_Language_Reference_Guide_zh.pdf
+
+participant main
+participant Broadcaster
+participant Device
+participant Server #blue
+
+autonumber
+main -> Broadcaster: Start
+Broadcaster -> Device: Load
+Broadcaster -[#red]> Server: rest: /{roomId}/broadcasters
+
+Broadcaster -> Broadcaster: CreateSendTransport
+Broadcaster -> Broadcaster: CreateRecvTransport
+
+@enduml

@@ -1,0 +1,63 @@
+@startuml xx
+
+' https://pdf.plantuml.net/1.2020.22/PlantUML_Language_Reference_Guide_zh.pdf
+
+participant "<SendTransport:Listener>\nBroadcaster" as Broadcaster
+participant Device
+participant "<SendHandler::PrivateListener>\nSendTransport" as SendTransport #yellow
+participant "<PeerConnection::PrivateListener>\nSendHandler" as SendHandler #Red
+participant Producer #green
+participant PeerConnection
+participant Server #blue
+
+autonumber
+
+[o-> Broadcaster: CreateSendTransport
+
+Broadcaster -> Device: GetSctpCapabilities
+== Create Server Transport ==
+Broadcaster -[#red]> Server: rest: /broadcasters/{roomId}/transports
+
+== Create Client Transport ==
+Broadcaster -> Device: CreateSendTransport
+create SendTransport
+Device -> SendTransport: new
+
+== Client Transport connect Server Transport ==
+
+Broadcaster -> SendTransport: Produce
+'Produce - sub1
+SendTransport -> SendHandler: Send
+SendHandler -> PeerConnection: CreateOffer
+SendHandler -> SendHandler : SetupTransport
+activate SendHandler
+SendHandler ->  SendTransport: OnConnect(dtlsParameters)
+activate SendTransport
+SendTransport ->  Broadcaster: OnConnect(transport,dtlsParameters)
+activate Broadcaster
+Broadcaster -[#red]> Server: rest: /broadcasters/{roomId}/transports/{transportId}/connect
+deactivate Broadcaster
+deactivate SendTransport
+
+
+SendHandler -> PeerConnection: SetLocalDescription
+note right
+应该是在这里
+建立了TCP连接
+end note
+SendHandler -> PeerConnection: SetRemoteDescription
+deactivate SendHandler
+
+'Produce - sub2
+SendTransport -> Broadcaster: OnProduce
+Broadcaster -[#red]> Server: rest: /broadcasters/{roomId}/transports/{transportId}/producers
+create Producer
+SendTransport -> Producer: new
+
+
+== ProduceData ==
+
+Broadcaster -> SendTransport: ProduceData
+
+
+@enduml
