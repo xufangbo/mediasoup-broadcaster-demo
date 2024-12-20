@@ -1,0 +1,102 @@
+@startuml SessionDescription
+interface SessionDescriptionInterface
+{
+    {field} string session_id
+    {field} string session_version
+    {field} SdpType type
+    {field} size_t number_of_mediasections
+    
+    {method} bool AddCandidate(IceCandidateInterface candidate)
+}
+
+class JsepSessionDescription
+
+class IceCandidateInterface
+{
+    {field} string sdp_mid
+    {field} int sdp_mline_index
+    {field} string server_url
+}
+
+class Candidate
+{
+    absl::string_view protocol,
+    const rtc::SocketAddress& address,
+    uint32_t priority,
+    absl::string_view username,
+    absl::string_view password,
+    absl::string_view type,
+    uint32_t generation,
+    absl::string_view foundation,
+    uint16_t network_id = 0,
+    uint16_t network_cost = 0
+}
+
+class SessionDescription
+{
+
+}
+
+class ContentInfo
+{
+    string mid
+    std::string name;
+    MediaProtocolType type {rtp,sctp,other};
+    bool rejected = false;
+    bool bundle_only = false;
+}
+
+class MediaContentDescription
+{
+    {field} MediaType type: {audio,video,data,unsupported}
+    {field} string protocol {SCTP,DTLS}
+    {field} RtpTransceiverDirection direction {sendrecv,sendonly,recvonly,inactive,stopped}
+    {field} CryptoParams cryptos
+}
+
+class TransportInfo
+{
+    {field} string content_name
+}
+
+class TransportDescription
+{
+  vector<string> transport_options;
+  string ice_ufrag;
+  string ice_pwd;
+  IceMode ice_mode {full,lite};
+}
+
+class ConnectionRole
+{
+    none
+    active
+    passive
+    actpass
+    holdconn
+}
+
+
+SessionDescriptionInterface <|-- JsepSessionDescription
+
+SessionDescriptionInterface -> SessionDescription
+
+IceCandidateInterface <-* SessionDescriptionInterface : candidates
+IceCandidateInterface --> Candidate : candidate
+
+
+SessionDescription *-> TransportInfo : transport_infos
+TransportInfo --> TransportDescription : description
+TransportDescription --> ConnectionRole : role
+
+SessionDescription *--> ContentInfo : contents
+ContentInfo --> MediaContentDescription : media_description
+
+MediaContentDescription <|-- RtpMediaContentDescription
+RtpMediaContentDescription <|-- AudioContentDescription
+RtpMediaContentDescription <|-- VideoContentDescription
+MediaContentDescription <|-- SctpDataContentDescription
+MediaContentDescription <|-- UnsupportedContentDescription
+
+
+@enduml
