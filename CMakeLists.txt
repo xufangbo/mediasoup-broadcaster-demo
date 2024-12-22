@@ -19,7 +19,7 @@ set(LIBWEBRTC_INCLUDE_PATH ${WEBRTC_PATH}/src)
 set(LIBWEBRTC_BINARY_PATH ${WEBRTC_PATH}/src/out/libstdcpp/obj)
 set(OPENSSL_INCLUDE_DIR /usr/include/openssl)
 set(CMAKE_USE_OPENSSL ON)
-add_compile_options(-Wall -Werror -w )
+add_compile_options(-Wall -Werror -w )  
 
 
 message("\n=========== mediasoup-broadcaster-demo Build Configuration ===========\n")
@@ -72,7 +72,7 @@ FetchContent_MakeAvailable(mediasoupclient)
 message(STATUS "Fetching cpr...\n")
 set(BUILD_CPR_TESTS OFF) # 停用测试，否则报找不到：std::this_thread::sleep_for
 FetchContent_Declare(
-	cpr
+	cpr 
 	GIT_REPOSITORY https://github.com/whoshuu/cpr
 	GIT_TAG 1.4.0
 )

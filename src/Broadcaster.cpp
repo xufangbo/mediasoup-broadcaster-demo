@@ -381,6 +381,7 @@ void Broadcaster::CreateDataConsumer()
 
 void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 {
+	log_info("<");
 	std::cout << "[INFO] creating mediasoup send WebRtcTransport..." << std::endl;
 
 	json sctpCapabilities = this->device.GetSctpCapabilities();
@@ -408,9 +409,9 @@ void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 
 		return;
 	}
-	log_debug("<"); // 太长
-	std::cout << r.text << std::endl;
-	log_debug(">"); // 太长
+	// log_debug("<"); // 太长
+	// std::cout << r.text << std::endl;
+	// log_debug(">"); // 太长
 
 	auto response = json::parse(r.text);
 
@@ -453,7 +454,7 @@ void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 	  this,
 	  sendTransportId,
 	  response["iceParameters"],
-	  response["iceCandidates"],
+	  response["iceCandidates"], // 这个时候已经有remote candidates了
 	  response["dtlsParameters"],
 	  response["sctpParameters"]);
 
@@ -522,6 +523,8 @@ void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 			run = timerKiller.WaitFor(std::chrono::seconds(intervalSeconds));
 		}
 	}).detach();
+
+	log_info(">");
 }
 
 void Broadcaster::CreateRecvTransport()

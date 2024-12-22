@@ -14,6 +14,8 @@
 #include "api/video_codecs/builtin_video_decoder_factory.h"
 #include "api/video_codecs/builtin_video_encoder_factory.h"
 
+#include "log.hpp"
+
 using namespace mediasoupclient;
 
 static rtc::scoped_refptr<webrtc::PeerConnectionFactoryInterface> factory;
@@ -96,6 +98,8 @@ rtc::scoped_refptr<webrtc::VideoTrackInterface> createVideoTrack(const std::stri
 
 rtc::scoped_refptr<webrtc::VideoTrackInterface> createSquaresVideoTrack(const std::string& /*label*/)
 {
+	log_info("<");
+
 	if (!factory)
 		createFactory();
 
@@ -105,6 +109,9 @@ rtc::scoped_refptr<webrtc::VideoTrackInterface> createSquaresVideoTrack(const st
 	videoTrackSource->Start();
 
 	std::cout << "[INFO] creating video track" << std::endl;
-	return factory->CreateVideoTrack(rtc::CreateRandomUuid(), videoTrackSource);
+	auto videoTrack = factory->CreateVideoTrack(rtc::CreateRandomUuid(), videoTrackSource);
+
+	log_info(">");
+	return videoTrack;
 	// return nullptr;
 }

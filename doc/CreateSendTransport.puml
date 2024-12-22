@@ -17,6 +17,10 @@ autonumber
 Broadcaster -> Device: GetSctpCapabilities
 == Create Server Transport ==
 Broadcaster -[#red]> Server: rest: /broadcasters/{roomId}/transports
+note left
+得到ICE-lite
+的candidate
+end note
 
 == Create Client Transport ==
 Broadcaster -> Device: CreateSendTransport
@@ -42,10 +46,13 @@ deactivate SendTransport
 
 SendHandler -> PeerConnection: SetLocalDescription
 note right
-应该是在这里
-建立了TCP连接
+
 end note
 SendHandler -> PeerConnection: SetRemoteDescription
+note right
+本地生成的Anwser
+连接到ICE-Lite
+end note
 deactivate SendHandler
 
 'Produce - sub2
