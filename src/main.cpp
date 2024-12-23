@@ -99,7 +99,7 @@ int main(int /*argc*/, char* /*argv*/[])
 
 	std::cout << "[INFO] verifying that room '" << envRoomId << "' exists..." << std::endl;
 
-	log_debug("%s", baseUrl.c_str());
+	log_trace("%s", baseUrl.c_str());
 	auto r = cpr::GetAsync(cpr::Url{ baseUrl }, cpr::VerifySsl{ verifySsl }).get();
 
 	if (r.status_code != 200)

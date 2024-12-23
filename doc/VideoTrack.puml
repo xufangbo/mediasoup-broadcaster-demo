@@ -1,0 +1,57 @@
+@startuml VideoTrack
+
+interface MediaSourceInterface 
+{
+    {method} SourceState state()
+}
+interface VideoSourceInterface << VideoFrame >>
+{
+    {method} void AddOrUpdateSink(VideoSinkInterface<VideoFrame>, VideoSinkWants)
+}
+
+interface VideoTrackSourceInterface << (S,#FF7700) Notifier >>
+{
+    {method} void AddEncodedSink( VideoSinkInterface<RecordableEncodedFrame>)
+}
+interface VideoTrackInterface
+{
+    string kind
+    string id
+    TrackState state
+}
+
+class VideoTrackSource
+{
+    {method} void AddOrUpdateSink(VideoSinkInterface<VideoFrame>, VideoSinkWants)
+    {method} void AddEncodedSink( VideoSinkInterface<RecordableEncodedFrame>)
+}
+class FrameGeneratorCapturerVideoTrackSource
+{
+
+}
+
+class FrameGeneratorCapturer
+{
+
+}
+class TestVideoCapturer
+{
+
+}
+
+MediaSourceInterface <|-- VideoTrackSourceInterface
+VideoSourceInterface <|-- VideoTrackSourceInterface
+
+VideoTrackSourceInterface <|-- VideoTrackSource
+
+
+VideoTrackSource <|-- FrameGeneratorCapturerVideoTrackSource
+
+VideoTrackInterface -> VideoTrackSourceInterface : source
+
+FrameGeneratorCapturerVideoTrackSource -> FrameGeneratorCapturer : video_capturer
+
+VideoTrackSourceInterface <|-- TestVideoCapturer
+TestVideoCapturer <|-- FrameGeneratorCapturer
+
+@enduml

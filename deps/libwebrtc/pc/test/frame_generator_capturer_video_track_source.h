@@ -40,24 +40,16 @@ class FrameGeneratorCapturerVideoTrackSource : public VideoTrackSource {
     int num_squares_generated = 50;
   };
 
-  FrameGeneratorCapturerVideoTrackSource(Config config,
-                                         Clock* clock,
-                                         bool is_screencast)
+  FrameGeneratorCapturerVideoTrackSource(Config config, Clock* clock, bool is_screencast)
       : VideoTrackSource(false /* remote */),
         task_queue_factory_(CreateDefaultTaskQueueFactory()),
         is_screencast_(is_screencast) {
-    video_capturer_ = std::make_unique<test::FrameGeneratorCapturer>(
-        clock,
-        test::CreateSquareFrameGenerator(config.width, config.height,
-                                         absl::nullopt,
-                                         config.num_squares_generated),
-        config.frames_per_second, *task_queue_factory_);
+    video_capturer_ = std::make_unique<test::FrameGeneratorCapturer>(  clock, test::CreateSquareFrameGenerator(config.width, config.height, absl::nullopt, config.num_squares_generated),config.frames_per_second, *task_queue_factory_);
     video_capturer_->Init();
   }
 
   FrameGeneratorCapturerVideoTrackSource(
-      std::unique_ptr<test::FrameGeneratorCapturer> video_capturer,
-      bool is_screencast)
+      std::unique_ptr<test::FrameGeneratorCapturer> video_capturer, bool is_screencast)
       : VideoTrackSource(false /* remote */),
         video_capturer_(std::move(video_capturer)),
         is_screencast_(is_screencast) {}

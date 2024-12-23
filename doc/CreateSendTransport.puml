@@ -18,8 +18,7 @@ Broadcaster -> Device: GetSctpCapabilities
 == Create Server Transport ==
 Broadcaster -[#red]> Server: rest: /broadcasters/{roomId}/transports
 note left
-得到ICE-lite
-的candidate
+会得到ICE-lite的candidate
 end note
 
 == Create Client Transport ==
@@ -45,9 +44,6 @@ deactivate SendTransport
 
 
 SendHandler -> PeerConnection: SetLocalDescription
-note right
-
-end note
 SendHandler -> PeerConnection: SetRemoteDescription
 note right
 本地生成的Anwser

@@ -70,7 +70,7 @@ std::future<void> Broadcaster::OnConnectSendTransport(const json& dtlsParameters
 
 	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
 	                  this->sendTransport->GetId() + "/connect";
-	log_debug(url.c_str());
+	log_trace(url.c_str());
 	auto r = cpr::PostAsync(
 	           cpr::Url{ url },
 	           cpr::Body{ body.dump() },
@@ -81,7 +81,7 @@ std::future<void> Broadcaster::OnConnectSendTransport(const json& dtlsParameters
 	if (r.status_code == 200)
 	{
 		promise.set_value();
-		log_debug("%s", r.text.c_str());
+		log_trace("%s", r.text.c_str());
 	}
 	else
 	{
@@ -107,7 +107,7 @@ std::future<void> Broadcaster::OnConnectRecvTransport(const json& dtlsParameters
 
 	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
 	                  this->recvTransport->GetId() + "/connect";
-	log_debug(url.c_str());
+	log_trace(url.c_str());
 
 	auto r = cpr::PostAsync(
 	           cpr::Url{ url },
@@ -119,7 +119,7 @@ std::future<void> Broadcaster::OnConnectRecvTransport(const json& dtlsParameters
 	if (r.status_code == 200)
 	{
 		promise.set_value();
-		log_debug("%s", r.text.c_str());
+		log_trace("%s", r.text.c_str());
 	}
 	else
 	{
@@ -174,7 +174,7 @@ std::future<std::string> Broadcaster::OnProduce(
 
 	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
 	                  this->sendTransport->GetId() + "/producers";
-	log_debug(url.c_str());
+	log_trace(url.c_str());
 
 	auto r = cpr::PostAsync(
 	           cpr::Url{ url },
@@ -185,7 +185,7 @@ std::future<std::string> Broadcaster::OnProduce(
 
 	if (r.status_code == 200)
 	{
-		log_debug("%s", r.text.c_str());
+		log_trace("%s", r.text.c_str());
 		auto response = json::parse(r.text);
 
 		auto it = response.find("id");
@@ -240,7 +240,7 @@ std::future<std::string> Broadcaster::OnProduceData(
 
 	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
 	                  this->sendTransport->GetId() + "/produce/data";
-	log_debug(url.c_str());
+	log_trace(url.c_str());
 
 	auto r = cpr::PostAsync(
 	           cpr::Url{ url },
@@ -251,7 +251,7 @@ std::future<std::string> Broadcaster::OnProduceData(
 
 	if (r.status_code == 200)
 	{
-		log_debug("%s", r.text.c_str());
+		log_trace("%s", r.text.c_str());
 		auto response = json::parse(r.text);
 
 		auto it = response.find("id");
@@ -283,7 +283,7 @@ void Broadcaster::Start(
   const json& routerRtpCapabilities,
   bool verifySsl)
 {
-	log_info("Broadcaster::Start()");
+	log_debug("Broadcaster::Start()");
 
 	this->baseUrl   = baseUrl;
 	this->verifySsl = verifySsl;
@@ -309,7 +309,7 @@ void Broadcaster::Start(
 	/* clang-format on */
 
 	std::string url = this->baseUrl + "/broadcasters";
-	log_debug(url.c_str());
+	log_trace(url.c_str());
 
 	auto r = cpr::PostAsync(
 	           cpr::Url{ url },
@@ -325,7 +325,7 @@ void Broadcaster::Start(
 
 		return;
 	}
-	log_debug("%s", r.text.c_str());
+	log_trace("%s", r.text.c_str());
 
 	this->CreateSendTransport(enableAudio, useSimulcast);
 	this->CreateRecvTransport();
@@ -344,7 +344,7 @@ void Broadcaster::CreateDataConsumer()
 	// create server data consumer
 	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports/" +
 	                  this->recvTransport->GetId() + "/consume/data";
-	log_debug(url.c_str());
+	log_trace(url.c_str());
 	auto r = cpr::PostAsync(
 	           cpr::Url{ url },
 	           cpr::Body{ body.dump() },
@@ -358,7 +358,7 @@ void Broadcaster::CreateDataConsumer()
 		return;
 	}
 
-	log_debug("%s", r.text.c_str());
+	log_trace("%s", r.text.c_str());
 	auto response = json::parse(r.text);
 	if (response.find("id") == response.end())
 	{
@@ -381,7 +381,7 @@ void Broadcaster::CreateDataConsumer()
 
 void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 {
-	log_info("<");
+	log_debug("<");
 	std::cout << "[INFO] creating mediasoup send WebRtcTransport..." << std::endl;
 
 	json sctpCapabilities = this->device.GetSctpCapabilities();
@@ -394,7 +394,7 @@ void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 	};
 	/* clang-format on */
 	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports";
-	log_debug(url.c_str());
+	log_trace(url.c_str());
 	auto r = cpr::PostAsync(
 	           cpr::Url{ url },
 	           cpr::Body{ body.dump() },
@@ -409,9 +409,9 @@ void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 
 		return;
 	}
-	// log_debug("<"); // 太长
+	// log_trace("<"); // 太长
 	// std::cout << r.text << std::endl;
-	// log_debug(">"); // 太长
+	// log_trace(">"); // 太长
 
 	auto response = json::parse(r.text);
 
@@ -524,7 +524,7 @@ void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 		}
 	}).detach();
 
-	log_info(">");
+	log_debug(">");
 }
 
 void Broadcaster::CreateRecvTransport()
@@ -543,7 +543,7 @@ void Broadcaster::CreateRecvTransport()
 
 	// create server transport
 	std::string url = this->baseUrl + "/broadcasters/" + this->id + "/transports";
-	log_debug(url.c_str());
+	log_trace(url.c_str());
 	auto r = cpr::PostAsync(
 	           cpr::Url{ url },
 	           cpr::Body{ body.dump() },
@@ -559,7 +559,7 @@ void Broadcaster::CreateRecvTransport()
 		return;
 	}
 
-	log_debug("%s", r.text.c_str());
+	log_trace("%s", r.text.c_str());
 	auto response = json::parse(r.text);
 
 	if (response.find("id") == response.end())
@@ -637,7 +637,7 @@ void Broadcaster::Stop()
 	}
 
 	std::string url = this->baseUrl + "/broadcasters/" + this->id;
-	log_debug(url.c_str());
+	log_trace(url.c_str());
 	cpr::DeleteAsync(cpr::Url{ url }, cpr::VerifySsl{ verifySsl }).get();
 }
 
