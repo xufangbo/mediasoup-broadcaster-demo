@@ -86,6 +86,8 @@
         "*.inc": "cpp",
         "__hash_table": "cpp",
         "locale": "cpp",
-        "coroutine": "cpp"
+        "coroutine": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     }
 }

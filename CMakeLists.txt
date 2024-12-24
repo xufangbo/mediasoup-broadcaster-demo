@@ -70,7 +70,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(mediasoupclient)
 
 message(STATUS "Fetching cpr...\n")
-set(BUILD_CPR_TESTS OFF) # 停用测试，否则报找不到：std::this_thread::sleep_for
+set(BUILD_CPR_TESTS OFF)  # 停用测试，否则报找不到：std::this_thread::sleep_for
 FetchContent_Declare(
 	cpr 
 	GIT_REPOSITORY https://github.com/whoshuu/cpr

@@ -7,8 +7,10 @@
 
 rtc::scoped_refptr<webrtc::AudioTrackInterface> createAudioTrack(const std::string& label);
 
-rtc::scoped_refptr<webrtc::VideoTrackInterface> createVideoTrack(const std::string& label);
+rtc::scoped_refptr<webrtc::VideoTrackInterface> createPeriodicVideoTrack(const std::string& label);
 
 rtc::scoped_refptr<webrtc::VideoTrackInterface> createSquaresVideoTrack(const std::string& label);
+
+rtc::scoped_refptr<webrtc::VideoTrackInterface> createLocalCameraTrack(const std::string& label);
 
 #endif
