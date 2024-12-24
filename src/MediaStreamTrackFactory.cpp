@@ -13,6 +13,7 @@
 #include "api/create_peerconnection_factory.h"
 #include "api/video_codecs/builtin_video_decoder_factory.h"
 #include "api/video_codecs/builtin_video_encoder_factory.h"
+#include <future>
 
 #include "log.hpp"
 
@@ -96,20 +97,31 @@ rtc::scoped_refptr<webrtc::VideoTrackInterface> createVideoTrack(const std::stri
 	//  return nullptr;
 }
 
-rtc::scoped_refptr<webrtc::VideoTrackInterface> createSquaresVideoTrack(const std::string& /*label*/)
+rtc::scoped_refptr<webrtc::VideoTrackInterface> createSquaresVideoTrack(const std::string& label)
 {
 	log_debug("<");
 
 	if (!factory)
 		createFactory();
 
-	auto* videoTrackSource = new rtc::RefCountedObject<webrtc::FrameGeneratorCapturerVideoTrackSource>( 
-		webrtc::FrameGeneratorCapturerVideoTrackSource::Config(), webrtc::Clock::GetRealTimeClock(), false);
-	videoTrackSource->Start();
+	std::promise<rtc::scoped_refptr<webrtc::VideoTrackInterface>> promise;
+	signalingThread->PostTask([signalingThread, label,&promise]() {
+		auto* videoTrackSource =
+		  new rtc::RefCountedObject<webrtc::FrameGeneratorCapturerVideoTrackSource>(
+		    webrtc::FrameGeneratorCapturerVideoTrackSource::Config(),
+		    webrtc::Clock::GetRealTimeClock(),
+		    false);
+		videoTrackSource->Start();
 
-	std::cout << "[INFO] creating video track" << std::endl;
-	auto videoTrack = factory->CreateVideoTrack(rtc::CreateRandomUuid(), videoTrackSource);
+		std::cout << "[INFO] creating video track" << std::endl;
+		auto videoTrack = factory->CreateVideoTrack(label, videoTrackSource);
+
+		promise.set_value(videoTrack);
+	});
+	auto future                                                = promise.get_future();
+	rtc::scoped_refptr<webrtc::VideoTrackInterface> videoTrack = future.get();
+
+	log_debug(">");
 
 	return videoTrack;
-	// return nullptr;
 }

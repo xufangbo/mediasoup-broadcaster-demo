@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include <future>
 
 #include "log.hpp"
 
@@ -482,6 +483,17 @@ void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 
 	if (this->device.CanProduce("video"))
 	{
+		// rtc::Thread *signaling_thread = this->sendTransport->getSignalingThread();		
+		// std::promise<rtc::scoped_refptr<webrtc::VideoTrackInterface>> promise;
+		// signaling_thread->PostTask([signaling_thread,&promise](){
+		// 	log_warn("signaling_thread %p",signaling_thread);
+		// 	auto videoTrack = createSquaresVideoTrack(std::to_string(rtc::CreateRandomId()));
+		// 	promise.set_value(videoTrack);
+		// });
+		// auto future = promise.get_future();
+		// rtc::scoped_refptr<webrtc::VideoTrackInterface> videoTrack = future.get();
+		// log_warn("----");
+		
 		auto videoTrack = createSquaresVideoTrack(std::to_string(rtc::CreateRandomId()));
 
 		if (useSimulcast)
