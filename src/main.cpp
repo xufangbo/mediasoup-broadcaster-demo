@@ -32,6 +32,7 @@ int main(int /*argc*/, char* /*argv*/[])
 	::putenv("SERVER_URL=http://101.201.247.187:4443");
 	::putenv("ROOM_ID=abcdefgh");
 	::putenv("VERIFY_SSL=false");
+	::putenv("ENABLE_AUDIO=true");
 	// log_init_default();
 	log_options opts = { .is_color = true, .writeFile = true, .hideWorkingPath = true};
 	opts.is_time = true;

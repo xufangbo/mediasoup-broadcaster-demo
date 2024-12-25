@@ -83,6 +83,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 	src/main.cpp
 	src/MediaStreamTrackFactory.cpp
 	src/MyTest.cpp
+	src/CapturerTrackSource.cpp
 )
 
 # Private (implementation) header files.

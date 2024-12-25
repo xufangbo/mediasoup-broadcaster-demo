@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "CapturerTrackSource.hpp"
 #include "MediaSoupClientErrors.hpp"
 #include "MediaStreamTrackFactory.hpp"
 #include "pc/test/fake_audio_capture_module.h"
@@ -14,7 +15,6 @@
 #include "api/video_codecs/builtin_video_decoder_factory.h"
 #include "api/video_codecs/builtin_video_encoder_factory.h"
 #include <future>
-#include "CapturerTrackSource.hpp"
 
 #include "log.hpp"
 
@@ -91,7 +91,8 @@ rtc::scoped_refptr<webrtc::VideoTrackInterface> createPeriodicVideoTrack(const s
 	if (!factory)
 		createFactory();
 
-	auto* videoTrackSource =  new rtc::RefCountedObject<webrtc::FakePeriodicVideoTrackSource>(false /* remote */);
+	auto* videoTrackSource =
+	  new rtc::RefCountedObject<webrtc::FakePeriodicVideoTrackSource>(false /* remote */);
 
 	return factory->CreateVideoTrack(label, videoTrackSource);
 	//  return nullptr;
@@ -102,31 +103,48 @@ rtc::scoped_refptr<webrtc::VideoTrackInterface> createSquaresVideoTrack(const st
 	if (!factory)
 		createFactory();
 
-	std::promise<rtc::scoped_refptr<webrtc::VideoTrackInterface>> promise;
-	signalingThread->PostTask([signalingThread, label,&promise]() {
+	// std::promise<rtc::scoped_refptr<webrtc::VideoTrackInterface>> promise;
+	// signalingThread->PostTask([signalingThread, label, &promise]() {
+	// 	auto* videoTrackSource =
+	// 	  new rtc::RefCountedObject<webrtc::FrameGeneratorCapturerVideoTrackSource>(
+	// 	    webrtc::FrameGeneratorCapturerVideoTrackSource::Config(),
+	// 	    webrtc::Clock::GetRealTimeClock(),
+	// 	    false);
+	// 	videoTrackSource->Start();
+
+	// 	std::cout << "[INFO] creating video track" << std::endl;
+	// 	auto videoTrack = factory->CreateVideoTrack(label, videoTrackSource);
+
+	// 	promise.set_value(videoTrack);
+	// });
+	// auto future = promise.get_future();
+	// return future.get();
+
+	rtc::scoped_refptr<webrtc::VideoTrackInterface> videoTrack;
+	signalingThread->BlockingCall([&label, &videoTrack] {
 		auto* videoTrackSource =
 		  new rtc::RefCountedObject<webrtc::FrameGeneratorCapturerVideoTrackSource>(
-		    webrtc::FrameGeneratorCapturerVideoTrackSource::Config(), webrtc::Clock::GetRealTimeClock(), false);
+		    webrtc::FrameGeneratorCapturerVideoTrackSource::Config(),
+		    webrtc::Clock::GetRealTimeClock(),
+		    false);
 		videoTrackSource->Start();
 
 		std::cout << "[INFO] creating video track" << std::endl;
-		auto videoTrack = factory->CreateVideoTrack(label, videoTrackSource);
-
-		promise.set_value(videoTrack);
+		videoTrack = factory->CreateVideoTrack(label, videoTrackSource);
 	});
-	auto future = promise.get_future();
-	return future.get();
+	return videoTrack;
 }
 
-rtc::scoped_refptr<webrtc::VideoTrackInterface> createLocalCameraTrack(const std::string& label) {    
-
+rtc::scoped_refptr<webrtc::VideoTrackInterface> createLocalCameraTrack(const std::string& label)
+{
 	if (!factory)
 		createFactory();
 
-    rtc::scoped_refptr<CapturerTrackSource> video_device = CapturerTrackSource::Create();
+	rtc::scoped_refptr<CapturerTrackSource> video_device = CapturerTrackSource::Create();
 
-    // 创建 VideoTrack
-    rtc::scoped_refptr<webrtc::VideoTrackInterface> video_track = factory->CreateVideoTrack(video_device,label);
-   
-   return video_track;
+	// 创建 VideoTrack
+	rtc::scoped_refptr<webrtc::VideoTrackInterface> video_track =
+	  factory->CreateVideoTrack(video_device, label);
+
+	return video_track;
 }
