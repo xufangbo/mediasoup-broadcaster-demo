@@ -180,11 +180,23 @@ class Candidate
 }
 
 ' =================================================================
-class AsyncPacketSocket #lightblue
+class AsyncPacketSocket #Salmon
 {
   SocketAddress localAddress
   SocketAddress remoteAddress
   CallbackList<AsyncPacketSocket*, int> on_close_
+}
+
+class Socket #Salmon
+{
+  int Bind(...)
+  int Connect(...)
+  int Send(...)
+  int SendTo(...)
+  int Recv(...)
+  int RecvFrom(...)
+  int Listen(...)
+  Socket* Accept(...)
 }
 
 class SentPacket <<struct>>
@@ -233,6 +245,7 @@ PacketSocketFactory ..> AsyncPacketSocket
 AsyncPacketSocket -> SentPacket
 
 AsyncPacketSocket <|-- AsyncUDPSocket
+AsyncUDPSocket -> Socket
 
 AsyncUDPSocket <|-- BufferedReadAdapter
 BufferedReadAdapter <|-- AsyncSSLSocket
