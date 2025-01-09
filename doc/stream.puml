@@ -1,0 +1,31 @@
+@startuml stream
+
+
+enum StreamState {
+    SS_CLOSED
+    SS_OPENING
+    SS_OPEN
+}
+
+interface StreamInterface
+{
+    StreamResult Read(ArrayView<uint8_t> buffer, size_t& read, int& error)
+    StreamResult Write(ArrayView<const uint8_t> data, size_t& written, int& error)
+
+    void Close()
+    bool Flush()
+}
+
+class SocketStream <<has_slots>>
+{
+    void OnConnectEvent(Socket* socket)
+    void OnReadEvent(Socket* socket)
+    void OnWriteEvent(Socket* socket)
+    void OnCloseEvent(Socket* socket, int err)
+}
+
+StreamInterface -> StreamState : state
+StreamInterface <|-- SocketStream
+SocketStream -> Socket : socket
+
+@enduml

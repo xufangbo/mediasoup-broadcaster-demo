@@ -1,0 +1,49 @@
+@startuml SetLocalDescription
+
+participant "<UI>\nmain_wnd" as main_wnd
+participant "PeerConnection\nClient" as PeerConnectionClient #LightSkyBlue
+participant "<MainWndCallback>\nConductor" as Conductor #LightGreen
+' participant "<CreateSessionDescriptionObserver>\nConductor" as CreateSessionDescriptionObserver #LightGreen
+participant "<webrtc>\nPeerConnection" as PeerConnection #LightCoral
+participant "Dummy\nSetSessionDescription\nObserver" as DummySetSessionDescriptionObserver #LightGreen
+
+
+== SetLocalDescription() ==
+
+[o-> main_wnd : OnRowActivated(tree_view)
+note right
+用户点击
+end note
+main_wnd -> Conductor : ConnectToPeer(peerId)
+Conductor -> Conductor : InitializePeerConnection()
+Conductor -> PeerConnection : CreateOffer()
+PeerConnection -> Conductor : OnSuccess(sessionDescription)
+note right
+通过webrtc的
+Create
+SessionDescription
+Observer
+end note
+Conductor -> PeerConnection : SetLocalDescription()
+PeerConnection -> DummySetSessionDescriptionObserver : OnSuccess()
+note right
+只显示日志
+没有逻辑
+end note
+
+== SetRemoteDescription() ==
+
+[o-> PeerConnectionClient : OnHangingGetRead(socket)
+note right
+信令服务推送的message消息
+end note
+PeerConnectionClient -> Conductor : OnMessageFromPeer\n(peerId,data)
+Conductor -> PeerConnection : SetRemoteDescription\n(observer,session_desc)
+
+PeerConnection -> DummySetSessionDescriptionObserver : OnSuccess()
+note right
+只显示日志
+没有逻辑
+end note
+
+@enduml

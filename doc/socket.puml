@@ -1,0 +1,87 @@
+@startuml socket
+
+
+interface Socket
+{
+    SocketAddress GetLocalAddress()
+    SocketAddress GetRemoteAddress()
+    int Bind(const SocketAddress& addr)
+    int Connect(const SocketAddress& addr)
+    int Send(const void* pv, size_t cb)
+    int SendTo(const void* pv, size_t cb, SocketAddress& addr)
+    int Recv(void* pv, size_t cb, int64_t* timestamp)
+    int RecvFrom(void*, size_t, SocketAddress* paddr, timestamp)
+    int Listen(int backlog)
+    Socket* Accept(SocketAddress* paddr)
+    int Close()
+    bool IsBlocking();
+}
+' note right of Socket : 没有平台相关实现 类的构造函数传入Socket
+
+class AsyncSocketAdapter <<has_slots>>
+{
+}
+
+' =================================================================
+
+
+
+interface SocketFactory
+{
+    Socket* CreateSocket(int family, int type)
+}
+
+class SocketServer #Salmon
+{
+    NetworkBinderInterface* network_binder
+    void SetMessageQueue(Thread* queue)
+}
+
+class PhysicalSocketServer
+{
+  Socket* CreateSocket(int family, int type)
+  virtual Socket* WrapSocket(SOCKET s)
+}
+
+
+interface Dispatcher
+{
+  uint32_t GetRequestedEvents()
+  void OnEvent(uint32_t ff, int err)
+}
+
+
+class PhysicalSocket #lightgreen
+{
+  SOCKET s_ 
+  bool udp_
+  int family_ = 0;
+  Mutex mutex_;
+  ConnState state_;
+  AsyncDnsResolverInterface resolver_;
+}
+
+class SocketDispatcher
+{
+}
+
+' =================================================================
+
+Socket <|-- AsyncSocketAdapter
+AsyncSocketAdapter <|-- SSLAdapter
+
+
+SocketFactory .> Socket
+SocketFactory <|-- SocketServer
+SocketServer <|-- PhysicalSocketServer
+
+Socket <|-- PhysicalSocket 
+SocketServer <- PhysicalSocket : socketServer
+PhysicalSocketServer <- PhysicalSocket : ps
+
+PhysicalSocket <|-- SocketDispatcher
+Dispatcher <|- SocketDispatcher
+
+
+
+@enduml

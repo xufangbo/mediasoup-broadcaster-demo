@@ -1,0 +1,54 @@
+@startuml ice-message
+
+class StunMessage
+{
+    int type
+    size_t length
+    std::string& transaction_id
+    string password
+
+    StunAddressAttribute* GetAddress(int type)
+    StunUInt32Attribute* GetUInt32(int type)
+    StunByteStringAttribute* GetByteString(int type)
+    int GetErrorCodeValue()
+
+    void AddAttribute(std::unique_ptr<StunAttribute> attr)
+    void ClearAttributes()
+
+    bool Read(rtc::ByteBufferReader* buf)
+    bool Write(rtc::ByteBufferWriter* buf)   
+
+}
+
+class StunAttribute 
+{
+    uint16_t type_;
+    uint16_t length_;
+
+    void SetOwner(StunMessage* owner)
+    bool Read(rtc::ByteBufferReader* buf)
+    bool Write(rtc::ByteBufferWriter* buf)
+}
+
+class StunAddressAttribute
+{
+
+}
+
+class StunXorAddressAttribute
+{
+
+}
+
+
+StunAttribute <|-- StunAddressAttribute
+StunAttribute <|-- StunXorAddressAttribute
+
+
+StunMessage *-> StunAttribute : attributes
+
+
+StunMessage <|-- TurnMessage
+StunMessage <|-- IceMessage
+
+@enduml

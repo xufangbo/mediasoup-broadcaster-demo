@@ -1,0 +1,248 @@
+@startuml ice
+
+interface CandidatePairInterface
+{
+    {field} Candidate local_candidate
+    {field} Candidate remote_candidate
+}
+
+
+enum IceCandidatePairState
+{
+    WAITING
+    IN_PROGRESS
+    SUCCEEDED
+    FAILED
+}
+
+enum WriteState
+{
+    STATE_WRITABLE
+    STATE_WRITE_UNRELIABLE
+    STATE_WRITE_INIT
+    STATE_WRITE_TIMEOUT
+}
+
+
+class ConnectionInfo
+{
+    {field} uint64_t priority
+    {field} bool nominated
+    {field} bool receiving
+    {field} bool connected
+    {field} int rtt
+    {field} Candidate local_candidate
+    {field} Candidate remote_candidate
+}
+
+class IceParameters
+{
+    string ufrag
+    string pwd
+}
+
+
+class Connection
+{
+    bool pruned
+
+    void SendStunBindingResponse(const StunMessage* message)
+    void SendGoogPingResponse(const StunMessage* message)
+    void SendResponseMessage(const StunMessage& response)
+    void Send(void* data, size_t size, rtc::PacketOptions& options)
+    void OnReadPacket(char* data, size_t size, int64_t packet_time_us)
+    void Prune()
+    void UpdateLocalIceParameters(int component, username_fragment, password)
+    void Ping(int64_t now, StunByteStringAttribute delta)
+    void ReceivedPingResponse( int rtt, request_id, nomination)
+    void HandleStunBindingOrGoogPingRequest(IceMessage* msg)
+    void HandlePiggybackCheckAcknowledgementIfAny(StunMessage* msg)
+    void MaybeSetRemoteIceParametersAndGeneration(IceParameters params,generation);
+    void MaybeUpdatePeerReflexiveCandidate(const Candidate& new_candidate);
+}
+
+
+
+class ProxyConnection
+{
+    void Send(void*, size_t, rtc::PacketOptions)
+}
+
+class Connection
+{
+    void Send(void*, size_t, rtc::PacketOptions)
+}
+
+class TCPConnection
+{
+    void Send(void*, size_t, rtc::PacketOptions)
+}
+
+enum IceRole {
+    ICEROLE_CONTROLLING
+    ICEROLE_CONTROLLED
+    ICEROLE_UNKNOWN
+}
+
+enum ProtocolType {
+  PROTO_UDP
+  PROTO_TCP
+  PROTO_SSLTCP
+  PROTO_TLS
+  PROTO_LAST
+}
+
+' enum SecurePolicy {
+
+'     SEC_DISABLED
+'     SEC_ENABLED
+'     SEC_REQUIRED
+' }
+
+' enum IceMode {
+'     ICEMODE_FULL
+'     ICEMODE_LITE
+' }
+
+enum AdapterType {
+  ADAPTER_TYPE_UNKNOWN 
+  ADAPTER_TYPE_ETHERNET 
+  ADAPTER_TYPE_WIFI 
+  ADAPTER_TYPE_CELLULAR
+  ADAPTER_TYPE_VPN
+  ADAPTER_TYPE_LOOPBACK 
+  ADAPTER_TYPE_ANY
+  ADAPTER_TYPE_CELLULAR_2G
+  ADAPTER_TYPE_CELLULAR_3G
+  ADAPTER_TYPE_CELLULAR_4G
+  ADAPTER_TYPE_CELLULAR_5G
+}
+
+class Network
+{
+    string name_
+    IPAddress prefix_
+    bool active_
+    vector<InterfaceAddress> ips_
+}
+
+interface PortInterface
+{
+    uint64_t tiebreaker
+    Connection* GetConnection(const rtc::SocketAddress& remote_addr)
+    Connection* CreateConnection(Candidate& remote_candidate, CandidateOrigin)
+    int SendTo( data, size_t , SocketAddress, options, bool payload)
+    signal4<PortInterface*, char*, size_t, rtc::SocketAddress&> SignalReadPacket
+    signal1<const rtc::SentPacket&> SignalSentPacket
+}
+
+class Port
+{
+    int component
+    uint32_t generation
+    string& username_fragment
+    string& password
+    uint16_t min_port
+    uint16_t max_port
+
+    void SetIceParameters(int component, username_fragment, password)
+    string ComputeFoundation(type,protocol,relay_protocol,base_address)
+}
+
+class UDPPort
+{
+    static UDPPort* Create(...)
+}
+
+class StunPort
+{
+    static StunPort* Create(...)
+}
+
+class TCPPort
+{
+    static TCPPort* Create(...)
+}
+
+class Candidate
+{
+    int component
+    string_view protocol
+    const rtc::SocketAddress& address
+    uint32_t priority
+    string_view username
+    string_view password
+    string_view type
+    uint32_t generation
+    string_view foundation
+    uint16_t network_id
+    uint16_t network_cost
+}
+
+' =================================================================
+class AsyncPacketSocket #lightblue
+{
+  SocketAddress localAddress
+  SocketAddress remoteAddress
+  CallbackList<AsyncPacketSocket*, int> on_close_
+}
+
+class SentPacket <<struct>>
+{
+}
+
+interface PacketSocketFactory 
+{
+  AsyncPacketSocket* CreateUdpSocket(SocketAddress,min_port,max_port)
+  AsyncListenSocket* CreateServerTcpSocket(SocketAddress,min_port,max_port)
+  AsyncPacketSocket* CreateClientTcpSocket( local_address, remote_address,...)
+}
+
+' =================================================================
+
+IceCandidatePairState <-- ConnectionInfo : state
+
+
+CandidatePairInterface <|-- Connection
+WriteState <-- Connection : write_state
+ConnectionInfo <- Connection : stats
+IceParameters <.. Connection 
+Connection -> Port : port
+Connection <-* PortInterface : connections
+
+Connection <|-- ProxyConnection
+Connection <|-- TCPConnection
+
+AdapterType <-- Network : type
+Network <-- PortInterface : network
+IceRole <-- PortInterface : iceRole
+ProtocolType <-- PortInterface : protocol
+PortInterface <|-- Port
+IceParameters <.. Port
+Candidate <-* Port  : candiates
+
+Port <|-- UDPPort
+Port <|-- TCPPort
+
+UDPPort <|-- StunPort
+
+' =================================================================
+
+Port -> PacketSocketFactory : factory
+PacketSocketFactory ..> AsyncPacketSocket
+AsyncPacketSocket -> SentPacket
+
+AsyncPacketSocket <|-- AsyncUDPSocket
+
+AsyncUDPSocket <|-- BufferedReadAdapter
+BufferedReadAdapter <|-- AsyncSSLSocket
+BufferedReadAdapter <|-- AsyncHttpsProxySocket
+BufferedReadAdapter <|-- AsyncSocksProxySocket
+
+
+AsyncPacketSocket <|-- AsyncTCPSocketBase
+AsyncTCPSocketBase <|-- AsyncTCPSocket
+
+
+
+@enduml
