@@ -1,0 +1,142 @@
+@startuml transport
+
+
+class JsepTransportController <<has_slots>>
+{
+    RTCError SetLocalDescription(...)
+    RTCError SetRemoteDescription(...)
+    RtpTransportInternal* GetRtpTransport(string_view mid)
+    DtlsTransportInternal* GetDtlsTransport(std::string& mid)
+    SctpTransport* GetSctpTransport(string& mid)
+    DataChannelTransportInterface* GetDataChannelTransport(string mid)
+}
+
+' ----------------------
+
+interface DtlsTransportInternal #LightSalmon
+{
+    int component
+    IceRole iceRole
+    uint64_t tiebreaker
+    IceMode remoteIceMode
+    IceConfig& config
+}
+
+' ----------------------
+interface IceTransportInterface
+{
+
+}
+
+interface PacketTransportInternal
+{
+    bool writable
+    bool receiving
+    signal5<PacketTransportInternal..> SignalReadPacket
+    int SendPacket(...)
+}
+class IceTransportInternal #LightGreen
+{
+    int component
+    IceRole iceRole
+    uint64_t tiebreaker
+    IceMode remoteIceMode
+    IceConfig& config
+    void MaybeStartGathering()
+}
+
+interface Connection #LightGreen
+{
+
+}
+
+interface IceAgentInterface #LightGreen
+{
+    IceRole iceRole
+    oid OnStartedPinging()
+    void UpdateState()
+}
+
+class P2PTransportChannel #LightGreen
+{
+}
+
+class PortAllocatorSession #LightGoldenRodYellow
+{
+    string_view content_name
+    int component
+    string_view ice_ufrag
+    string_view ice_pwd
+    uint32_t flags
+    void StartGettingPorts()
+}
+
+interface PortInterface #LightBlue
+{
+
+}
+
+class Candidate
+{
+
+}
+
+class PortAllocator #LightGoldenRodYellow
+{
+    int min_port_;
+    int max_port_;
+    uint64_t tiebreaker
+    ServerAddresses stun_servers
+    VpnPreference vpn_preference
+}
+
+class BasicPortAllocatorSession #LightGoldenRodYellow
+{
+    void StartGettingPorts()
+}
+
+class BasicPortAllocator #LightGoldenRodYellow
+{
+    PortAllocatorSession* CreateSessionInternal(...)
+    OnIceRegathering(session, IceRegatheringReason reason)
+}
+
+enum IceRegatheringReason {
+  NETWORK_CHANGE
+  NETWORK_FAILURE
+  OCCASIONAL_REFRESH
+  MAX_VALUE
+}
+
+' ----------------------
+
+JsepTransportController *-> DtlsTransportInternal : dtlsTransprots
+
+' ----------------------
+
+
+PacketTransportInternal <|-- DtlsTransportInternal
+DtlsTransportInternal -> IceTransportInternal : ice_transport
+
+' ----------------------
+
+IceTransportInterface --> IceTransportInternal : internal
+PacketTransportInternal <|-- IceTransportInternal
+Connection <-- IceTransportInternal : selected_connection
+
+IceAgentInterface <|-- P2PTransportChannel
+IceTransportInternal <|-- P2PTransportChannel
+
+
+PortAllocatorSession <-* P2PTransportChannel : allocator_sessions
+PortAllocator *-> PortAllocatorSession : pooledSessions
+
+PortInterface <--* PortAllocatorSession : readyPorts
+Candidate <--* PortAllocatorSession : readyCandidates
+
+PortAllocatorSession <|-- BasicPortAllocatorSession
+PortAllocator <|-- BasicPortAllocator
+
+IceRegatheringReason <- BasicPortAllocator
+
+@enduml

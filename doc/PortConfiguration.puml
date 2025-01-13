@@ -1,0 +1,33 @@
+@startuml PortConfiguration
+
+class SocketAddress
+{
+    IPAddress ip
+    int port
+}
+
+class PortConfiguration <<struct>>
+{
+    string username;
+    string password;
+}
+
+class RelayServerConfig <<struct>>
+{
+    string_view address
+    int port
+    absl::string_view username
+    absl::string_view password
+    ProtocolType proto
+    bool secure
+}
+
+
+PortConfiguration --> SocketAddress : stun_address
+PortConfiguration *--> SocketAddress : stun_servers
+
+
+PortConfiguration *--> RelayServerConfig : RelayList
+
+SocketAddress <- RelayServerConfig : address
+@enduml
