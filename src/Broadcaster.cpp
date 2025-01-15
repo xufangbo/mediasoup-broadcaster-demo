@@ -482,8 +482,8 @@ void Broadcaster::CreateSendTransport(bool enableAudio, bool useSimulcast)
 
 	if (this->device.CanProduce("video"))
 	{
-		auto videoTrack = createLocalCameraTrack(std::to_string(rtc::CreateRandomId()));
-		// auto videoTrack = createSquaresVideoTrack(std::to_string(rtc::CreateRandomId()));
+		// auto videoTrack = createLocalCameraTrack(std::to_string(rtc::CreateRandomId()));
+		auto videoTrack = createSquaresVideoTrack(std::to_string(rtc::CreateRandomId()));
 		// auto videoTrack = createPeriodicVideoTrack(std::to_string(rtc::CreateRandomId()));
 
 		if (useSimulcast)
