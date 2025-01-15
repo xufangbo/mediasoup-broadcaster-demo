@@ -8,10 +8,18 @@ participant Device
 participant Server #blue
 
 autonumber
+
+== 加入房间 ==
+main -[#red]> Server: rest: rooms/{roomId}
+Server --> main : rtpCabalilities
+
+== 创建broadcaster ==
 main -> Broadcaster: Start
 Broadcaster -> Device: Load
 Broadcaster -[#red]> Server: rest: /{roomId}/broadcasters
+Server --> Broadcaster : 房间的peerList，broadcaster中没用
 
+== 创建Transport ==
 Broadcaster -> Broadcaster: CreateSendTransport
 Broadcaster -> Broadcaster: CreateRecvTransport
 

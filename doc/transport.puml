@@ -1,6 +1,4 @@
-@startuml transport
-
-
+@startuml
 class JsepTransportController <<has_slots>>
 {
     RTCError SetLocalDescription(...)
@@ -111,6 +109,7 @@ enum IceRegatheringReason {
 ' ----------------------
 
 JsepTransportController *-> DtlsTransportInternal : dtlsTransprots
+JsepTransportController --> PortAllocator : new()
 
 ' ----------------------
 
@@ -138,5 +137,4 @@ PortAllocatorSession <|-- BasicPortAllocatorSession
 PortAllocator <|-- BasicPortAllocator
 
 IceRegatheringReason <- BasicPortAllocator
-
 @enduml
